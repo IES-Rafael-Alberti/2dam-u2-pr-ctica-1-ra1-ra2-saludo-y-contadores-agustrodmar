@@ -25,6 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.arodmar432p.a2dam_u2_pr_ctica_1_ra1_ra2_saludo_y_contadores_agustrodmar.ui.theme._2damu2prctica1ra1ra2saludoycontadoresagustrodmarTheme
 
 
+/**
+ * Actividad principal de la aplicación. Primera pantalla que ven los usuarios
+ * cuando abren la aplicación. En esta actividad, se muestra el botón de saludo.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +51,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * GreetingButton, composable que muestra un botón en el centro de la pantalla.
+ * Cuando se hace clic en el botón, se abre un cuadro de diálogo que permite al usuario introducir su nombre.
+ * El cuadro de diálogo tiene tres botones: "Aceptar", "Limpiar" y "Cancelar".
+ * - "Aceptar" cierra el cuadro de diálogo, muestra un saludo personalizado en la pantalla y actualiza los contadores de los botones.
+ * - "Limpiar" borra el campo de texto dentro del cuadro de diálogo.
+ * - "Cancelar" cierra el cuadro de diálogo, borra el saludo de la pantalla y actualiza los contadores de los botones.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun GreetingButton() {
+    // Variables de estado para almacenar los valores de los campos de texto,
+    // los contadores y el estado del diálogo
     val text = remember { mutableStateOf("") }
     val showDialog = remember { mutableStateOf(false) }
     val name = remember { mutableStateOf("") }
@@ -58,28 +72,36 @@ fun GreetingButton() {
     val cancelCount = remember { mutableStateOf(0) }
     val hasClicked = remember { mutableStateOf(false) }
 
+    // Box que ocupa todo el espacio disponible
     Box(modifier = Modifier.fillMaxSize()) {
+        // Columna centrada para el botón y el texto
         Column(
             modifier = Modifier.align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Botón que muestra "Saludar" o los contadores dependiendo
+            // de si se ha hecho clic en "Aceptar" o "Cancelar"
             Button(onClick = { showDialog.value = true }) {
                 Text(if (hasClicked.value) "Saludar A${acceptCount.value} C${cancelCount.value}" else "Saludar")
             }
 
+            // Espaciador para dar espacio entre el botón y el texto
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Texto que muestra el valor de la variable de estado 'text'
             Text(
                 text = text.value,
-                modifier = Modifier.widthIn(max = 200.dp)  // Limit the width of the Text composable
+                modifier = Modifier.widthIn(max = 200.dp)  // Limita el ancho
             )
         }
 
+        // Diálogo que se muestra cuando 'showDialog' es verdadero
         if (showDialog.value) {
             AlertDialog(
                 onDismissRequest = { showDialog.value = false },
                 title = {
+                    // Fila para alinear el título a la derecha
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
@@ -91,16 +113,19 @@ fun GreetingButton() {
                     }
                 },
                 text = {
+                    // Columna con padding para el contenido del diálogo
                     Column(
                         modifier = Modifier
                             .padding(top = 15.dp, bottom = 20.dp)
                     ) {
                         Text("Introduce tu nombre")
                         TextField(value = name.value, onValueChange = { name.value = it })
+                        // Fila con los botones "Aceptar", "Limpiar" y "Cancelar"
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            // Botón "Aceptar" que actualiza el texto y los contadores
                             Button(
                                 modifier = Modifier.weight(1f).widthIn(min = 80.dp),
                                 onClick = {
@@ -112,12 +137,14 @@ fun GreetingButton() {
                             ) {
                                 Text("Aceptar", fontSize = 10.sp)
                             }
+                            // Botón "Limpiar" que borra el campo de texto
                             Button(
                                 modifier = Modifier.weight(1f).widthIn(min = 80.dp),
                                 onClick = { name.value = "" }
                             ) {
                                 Text("Limpiar", fontSize = 10.sp)
                             }
+                            // Botón "Cancelar" que cierra el diálogo y actualiza los contadores
                             Button(
                                 modifier = Modifier.weight(1f).widthIn(min = 80.dp),
                                 onClick = {
