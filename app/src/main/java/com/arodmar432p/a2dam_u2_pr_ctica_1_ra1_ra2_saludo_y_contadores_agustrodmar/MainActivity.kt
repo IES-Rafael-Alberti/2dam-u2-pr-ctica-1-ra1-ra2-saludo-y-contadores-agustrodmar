@@ -56,50 +56,84 @@ fun GreetingButton() {
     val name = remember { mutableStateOf("") }
     val acceptCount = remember { mutableStateOf(0) }
     val cancelCount = remember { mutableStateOf(0) }
+    val hasClicked = remember { mutableStateOf(false) }
 
-    Button(onClick = { showDialog.value = true }) {
-        Text("Saludar A${acceptCount.value} C${cancelCount.value}")
-    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = { showDialog.value = true }) {
+                Text(if (hasClicked.value) "Saludar A${acceptCount.value} C${cancelCount.value}" else "Saludar")
+            }
 
-    Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-    Text(text = text.value)
+            Text(
+                text = text.value,
+                modifier = Modifier.widthIn(max = 200.dp)  // Limit the width of the Text composable
+            )
+        }
 
-    if (showDialog.value) {
-        AlertDialog(
-            onDismissRequest = { showDialog.value = false },
-            title = { Text("Configuración", style = MaterialTheme.typography.labelLarge.copy(fontSize = 20.sp, fontWeight = FontWeight.Bold)) },
-            text = {
-                Column(
-                    modifier = Modifier
-                        .padding(top = 15.dp, bottom = 20.dp)
-                ) {
-                    Text("Introduce tu nombre")
-                    TextField(value = name.value, onValueChange = { name.value = it })
+        if (showDialog.value) {
+            AlertDialog(
+                onDismissRequest = { showDialog.value = false },
+                title = {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Button(onClick = {
-                            text.value = "¡Hola, ${name.value}!"
-                            showDialog.value = false
-                            acceptCount.value++
-                        }) {
-                            Text("Aceptar")
-                        }
-                        Button(onClick = { name.value = "" }) {
-                            Text("Limpiar")
-                        }
-                        Button(onClick = {
-                            showDialog.value = false
-                            cancelCount.value++
-                        }) {
-                            Text("Cancelar")
+                        Text(
+                            "Configuración",
+                            style = MaterialTheme.typography.labelLarge.copy(fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        )
+                    }
+                },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 15.dp, bottom = 20.dp)
+                    ) {
+                        Text("Introduce tu nombre")
+                        TextField(value = name.value, onValueChange = { name.value = it })
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Button(
+                                modifier = Modifier.weight(1f).widthIn(min = 80.dp),
+                                onClick = {
+                                    text.value = "¡Hola, ${name.value}!"
+                                    showDialog.value = false
+                                    acceptCount.value++
+                                    hasClicked.value = true
+                                }
+                            ) {
+                                Text("Aceptar", fontSize = 10.sp)
+                            }
+                            Button(
+                                modifier = Modifier.weight(1f).widthIn(min = 80.dp),
+                                onClick = { name.value = "" }
+                            ) {
+                                Text("Limpiar", fontSize = 10.sp)
+                            }
+                            Button(
+                                modifier = Modifier.weight(1f).widthIn(min = 80.dp),
+                                onClick = {
+                                    text.value = ""
+                                    showDialog.value = false
+                                    cancelCount.value++
+                                    hasClicked.value = true
+                                }
+                            ) {
+                                Text("Cancelar", fontSize = 10.sp)
+                            }
                         }
                     }
-                }
-            },
-            confirmButton = { }
-        )
+                },
+                confirmButton = { }
+            )
+        }
     }
 }
