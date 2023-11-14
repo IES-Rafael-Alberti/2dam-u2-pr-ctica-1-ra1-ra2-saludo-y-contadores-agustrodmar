@@ -120,10 +120,12 @@ fun GreetingButton() {
                     ) {
                         Text("Introduce tu nombre")
                         TextField(value = name.value, onValueChange = { name.value = it })
+                        Spacer(modifier = Modifier.height(20.dp)) // Espacio entre TextField y los botones
+
                         // Fila con los botones "Aceptar", "Limpiar" y "Cancelar"
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.SpaceEvenly  // Espaciado uniforme entre los botones
                         ) {
                             // Botón "Aceptar" que actualiza el texto y los contadores
                             Button(
@@ -135,15 +137,21 @@ fun GreetingButton() {
                                     hasClicked.value = true
                                 }
                             ) {
-                                Text("Aceptar", fontSize = 10.sp)
+                                Text("Aceptar", fontSize = 8.sp)
                             }
+
+                            Spacer(modifier = Modifier.width(16.dp))  // Espacio entre los botones
+
                             // Botón "Limpiar" que borra el campo de texto
                             Button(
                                 modifier = Modifier.weight(1f).widthIn(min = 80.dp),
                                 onClick = { name.value = "" }
                             ) {
-                                Text("Limpiar", fontSize = 10.sp)
+                                Text("Limpiar", fontSize = 8.sp)
                             }
+
+                            Spacer(modifier = Modifier.width(16.dp))  // Espacio entre los botones
+
                             // Botón "Cancelar" que cierra el diálogo y actualiza los contadores
                             Button(
                                 modifier = Modifier.weight(1f).widthIn(min = 80.dp),
@@ -154,7 +162,7 @@ fun GreetingButton() {
                                     hasClicked.value = true
                                 }
                             ) {
-                                Text("Cancelar", fontSize = 10.sp)
+                                Text("Cancelar", fontSize = 7.5.sp)
                             }
                         }
                     }
